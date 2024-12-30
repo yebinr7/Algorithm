@@ -47,4 +47,15 @@
 </tbody>
       </table>
 
+### 문제풀이 및 정리
+
+분기문 스코프 내에서 string answer 다시 변수를 선언해버려서 문제가 생겼었다. 위의 string answer을 이용해야한다.
+
+ std::string은 기본적으로 빈 문자열로 초기화되므로, 간단한 경우에는 선언만 해도 충분합니다.
+예를 들어:
+```cpp
+std::string answer; // 암묵적 초기화 (빈 문자열)
+```
+
+
 > 출처: 프로그래머스 코딩 테스트 연습, https://school.programmers.co.kr/learn/challenges
