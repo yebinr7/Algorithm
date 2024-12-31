@@ -47,7 +47,7 @@
 </tbody>
       </table
 
-# 피드백
+### 피드백
 조건에 유효숫자나 절대오차 상대오차 없으면 그냥 실수형으로 답 만들면 된다.
 
 > 출처: 프로그래머스 코딩 테스트 연습, https://school.programmers.co.kr/learn/challenges
