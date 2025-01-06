@@ -6,7 +6,7 @@ using namespace std;
 
 long long solution(long long n)
 {
-    long long sqrt = std::sqrt(n);
+    long long sqrt = std::sqrt<long long>(n); // 이렇게 안해도 되나?
     
     long long checkup = sqrt * sqrt;
     if (checkup == n)
