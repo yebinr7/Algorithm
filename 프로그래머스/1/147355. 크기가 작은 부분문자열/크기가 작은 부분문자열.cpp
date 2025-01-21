@@ -3,28 +3,17 @@
 
 using namespace std;
 
-int solution(string t, string p)
-{
-    //p의 길이 확인 
-    //t를 p의 길이로 쪼개기(왼쪽부터)
-    //쪼개진 t`들과 p를 비교해가며 p보다 작은 t`들의 개수 리턴하기 
-    int tSize = t.size();//이렇게 따로 빼는거 최적화에 의미있나??? 
+int solution(string t, string p) {
+    int tSize = t.size();
     int pSize = p.size();
-    long long pNum = stoll(p); //int는 32비트 유효숫자 10자리
-    long long tSubNum = 0; //longlong 64비트 20자리 
     int answer = 0;
-    //[012][123][234] 이런식 idx<= <idx+size()
-    for (size_t i = 0; i < tSize; i++)
-    {
-        //1. 스트링 자르기
-        if (i + pSize > tSize) //인덱스 초과시 
-            break;
-        std::string substr = t.substr(i, pSize/*개수*/);
-        //2. 숫자로 만들기
-        tSubNum = stoll(substr);
-        //3. 비교하기 
-        if (tSubNum <= pNum)
+
+    for (int i = 0; i <= tSize - pSize; i++) { // 인덱스 초과 방지
+        string substr = t.substr(i, pSize); // 부분 문자열 추출
+        if (substr <= p) { // 문자열 비교
             answer++;
+        }
     }
+
     return answer;
 }
