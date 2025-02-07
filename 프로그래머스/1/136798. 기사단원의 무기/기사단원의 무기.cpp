@@ -10,9 +10,8 @@ int GetDivisorSum(int n)
     int divisioNum = 0;
     for (int i = 1; i <= sqrt(n); i++)
     {
-        if (n == 1)
-            divisioNum++;
-        else if (n % i == 0)
+        
+        if (n % i == 0)
         {
             if (i == n / i)
             {
