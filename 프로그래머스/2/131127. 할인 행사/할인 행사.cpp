@@ -3,68 +3,52 @@
 #include <unordered_map>
 using namespace std;
 
-int solution(vector<string> want, vector<int> number, vector<string> discount)
-{
+int solution(vector<string> want, vector<int> number, vector<string> discount) {
     int answer = 0;
 
-    // 맵에 옮기기 -> 맵 한번에 초기화 하는 법 있나?
-    unordered_map<string, int> map;
-
-    for (size_t i = 0; i<want.size(); ++i)
-    {
-        map.emplace(want[i], number[i]); // pair 로 초기화 됨
+    // 원하는 제품과 수량을 맵에 저장
+    unordered_map<string, int> wantMap;
+    for (size_t i = 0; i < want.size(); ++i) {
+        wantMap[want[i]] = number[i];
     }
 
+    // 슬라이딩 윈도우를 위한 맵 초기화
+    unordered_map<string, int> windowMap;
 
-    // discount [0] 부터 10개씩 돌기 
+    // 초기 윈도우 설정 (첫 10일)
+    for (size_t i = 0; i < 10; ++i) {
+        windowMap[discount[i]]++;
+    }
 
-    for (size_t i = 0; i <= discount.size() - 10; ++i) // 10개전까지만!! 마지막 10일 처리해주기
-    {
-        // 맵 복사해오기
-        unordered_map<string, int> dupMap = map; 
-        bool flag = false;
-        for (size_t j = i; j < i  + 10; ++j) // 10개 돌아가면서 체크 
-        {
-            auto iter = dupMap.find(discount[j]);
-            if (iter != dupMap.end()) // 찾았다면
-            {
-                // 요소 하나 삭제하기
-                --dupMap[discount[j]]; // 음수값 나올 수 없다. 위에서 찾았다면 최소 1개 존재했다는 뜻
-               
-                if (dupMap[discount[j]] < 0) // 음수값 나오면 예외처리 
-                {
-                   
-                    break;
-                }
-            }
-            else
-            {
-                // 못찾았으면 끝
-                break;
+    // 윈도우 검사 함수
+    auto isMatch = [&]() -> bool {
+        for (auto& pair : wantMap) {
+            if (windowMap[pair.first] != pair.second) {
+                return false;
             }
         }
+        return true;
+    };
 
-        
-        // dupMap의 요소가 모두 0이라면?..
-        for (auto iter = dupMap.begin(); iter != dupMap.end(); ++iter)
-        {
-            if ((*iter).second > 0) // 0보다 크면 안됨 
-            {
-                flag = true;
-                break;
-            }
+    // 첫 번째 윈도우 검사
+    if (isMatch()) {
+        answer++;
+    }
+
+    // 슬라이딩 윈도우 이동
+    for (size_t i = 10; i < discount.size(); ++i) {
+        windowMap[discount[i - 10]]--; // 이전 요소 제거
+        windowMap[discount[i]]++;     // 새로운 요소 추가
+
+        if (isMatch()) {
+            answer++;
         }
-        if (!flag)
-            ++answer; 
-        //if (dupMap.empty()) // 모두 지워졌다면 만족하는 것
-        //    ++answer;
     }
 
     return answer;
 }
 
-int main(void)
-{
+int main() {
     int answer1 = solution(
         { "banana", "apple", "rice", "pork", "pot" },
         { 3, 2, 2, 2, 1 },
