@@ -1,128 +1,186 @@
-#include <iostream>
+// 9.4 모의고사
 #include <string>
 #include <vector>
-#include <algorithm>
-#include <unordered_map>
-#include <map>
-#include <utility>
+#include <iostream>
+
 using namespace std;
 
-vector<int> solution(vector<int> answers)
+int VectorA(int i)
 {
-    // 1, 2, 3, 4, 5,     1, 2, 3, 4, 5...
-    // 2, 1, 2, 3, 2, 4, 2, 5,    2, 1, 2, 3, 2, 4, 2, 5 ...
-    // 3, 3, 1, 1, 2, 2, 4, 4, 5, 5,       3, 3, 1, 1, 2, 2, 4, 4, 5, 5, 
-
-    // 정답배열 반복됨 몇개인지 모름? 
-    // 최대 1만.. O(N) 1000만 이라 가능 
-
-
-
-    vector<int> tenThousandProb;
-    vector<int> aPattern{ 1, 2, 3, 4, 5 };
-    vector<int> bPattern{ 2, 1, 2, 3, 2, 4, 2, 5 };
-    vector<int> cPattern{ 3, 3, 1, 1, 2, 2, 4, 4, 5, 5 };
-
-    vector<int> aAnswer;
-    vector<int> bAnswer;
-    vector<int> cAnswer;
-
-
-    int aScore = 0;
-    int bScore = 0;
-    int cScore = 0;
-
-    //1만개 정답지 초기화
-    for (size_t i = 0; i < 10'000; i++)
+    if (i % 5 == 0)
     {
-        if (aAnswer.size() >= 10000)
-            break;
+        return 1;
+    }
+    else if(i % 5 == 1)
+    {
+        return 2;
+    }
+    else if (i % 5 == 2)
+    {
+        return 3;
+    }
+    else if (i % 5 == 3)
+    {
+        return 4;
+    }
+    else if (i % 5 == 4)
+    {
+        return 5;
+    }
+}
 
-        i %= 5; //0~6인덱스이고.. 7됐을때 다시 0으로 돌아가게 
-        aAnswer.emplace_back(aPattern[i]);
-    }
-    //1만개 정답지 초기화
-    for (size_t i = 0; i < 10'000; i++)
+int VectorB(int i)
+{
+    if (i % 8 == 0)
     {
-        if (bAnswer.size() >= 10000)
-            break;
-        i %= 8; //0~6인덱스이고.. 7됐을때 다시 0으로 돌아가게 
-        bAnswer.emplace_back(bPattern[i]);
+        return 2;
     }
-    //1만개 정답지 초기화
-    for (size_t i = 0; i < 10'000; i++)
+    else if (i % 8 == 1)
     {
-        if (cAnswer.size() >= 10000)
-            break;
-        i %= 10; //0~6인덱스이고.. 7됐을때 다시 0으로 돌아가게 
-        cAnswer.emplace_back(cPattern[i]);
+        return 1;
+    }
+    else if (i % 8 == 2)
+    {
+        return 2;
+    }
+    else if (i % 8 == 3)
+    {
+        return 3;
+    }
+    else if (i % 8 == 4)
+    {
+        return 2;
+    }
+    else if (i % 8 == 5)
+    {
+        return 4;
+    }
+    else if (i % 8 == 6)
+    {
+        return 2;
+    }
+    else if (i % 8 == 7)
+    {
+        return 5;
+    }
+}
+
+int VectorC(int i)
+{
+    if (i % 10 == 0)
+    {
+        return 3;
+    }
+    else if (i % 10 == 1)
+    {
+        return 3;
+    }
+    else if (i % 10 == 2)
+    {
+        return 1;
+    }
+    else if (i % 10 == 3)
+    {
+        return 1;
+    }
+    else if (i % 10 == 4)
+    {
+        return 2;
+    }
+    else if (i % 10 == 5)
+    {
+        return 2;
+    }
+    else if (i % 10 == 6)
+    {
+        return 4;
+    }
+    else if (i % 10 == 7)
+    {
+        return 4;
+    }
+    else if (i % 10 == 8)
+    {
+        return 5;
+    }
+    else if (i % 10 == 9)
+    {
+        return 5;
+    }
+}
+
+vector<int> solution(vector<int> answers) 
+{
+    // answer의 사이즈에 따른 a b c 벡터 런타임에 만들기
+    vector<int> a;
+    vector<int> b;
+    vector<int> c;
+
+    int scoreA = 0;
+    int scoreB = 0; 
+    int scoreC = 0;
+
+    for (int i = 0; i < answers.size(); ++i)
+    {
+        //// a, b, c 런타임에 answer 크기와 맞는 벡터 초기화 ->; 근데 미리 크기 size()만큼 capacity 늘려놓는게 비용 좋지 않으려나..
+        //a.emplace_back(VectorA(i));
+        //a.emplace_back(VectorB(i));
+        //a.emplace_back(VectorC(i)); 
+
+        // 애초에 정답만 개수 세면되니깐.. 값 확인하면서 맞으면 점수 쌓기
+        if (VectorA(i) == answers[i])
+            scoreA++;
+        if (VectorB(i) == answers[i])
+            scoreB++;
+        if (VectorC(i) == answers[i])
+            scoreC++;
     }
 
-    for (size_t i = 0; i < answers.size(); i++)
-    {
-        if (aAnswer[i] == answers[i])
-            aScore++;
-        if (bAnswer[i] == answers[i])
-            bScore++;
-        if (cAnswer[i] == answers[i])
-            cScore++;
-    }
-    //multimap<int,int> scoreMap{ {aScore,1},{bScore,2},{cScore,3}};
-    ////점수 중복허용
-    vector<int> answer;
-
-    vector<pair<int, int>>scoreVec{{aScore,1},{bScore,2},{cScore,3} };
-    std::sort(scoreVec.begin(), scoreVec.end(), [](pair<int, int> left, pair<int, int> right)
-        {
-            return left.first < right.first; //오름차순
-        });
-
-    //abc 값 같은경우 ->최대
-
-    if (scoreVec[0].first == scoreVec[1].first &&
-        scoreVec[1].first == scoreVec[2].first)
-    {
-        answer.emplace_back(scoreVec[0].second);
-        answer.emplace_back(scoreVec[1].second);
-        answer.emplace_back(scoreVec[2].second);
-    }
-    //a b c 값 모두 다른 경우 
-    else if (scoreVec[0].first != scoreVec[1].first &&
-        scoreVec[1].first != scoreVec[2].first)
-    {
-        answer.emplace_back(scoreVec[2].second);//오름차순이니깐 맨 오른쪽이 최대값 
-    }
-    //오름차순 0 1 2, 1,2는같고 0은 다른경우 
-    else if (scoreVec[0].first != scoreVec[1].first &&
-        scoreVec[1].first == scoreVec[2].first)
-    {
-        answer.emplace_back(scoreVec[1].second);
-        answer.emplace_back(scoreVec[2].second);
-    }
-    //0,1은 같고 2는 다른경우 
-    else if (scoreVec[0].first == scoreVec[1].first &&
-        scoreVec[1].first != scoreVec[2].first)
-    {
-        answer.emplace_back(scoreVec[2].second);
-    }
-
-  
-    //중복허용 맵 
+    // 7가지 경우에 맞게 리턴? 
     
-    
+    // 점수가 모두 동일하다면?
+    if (scoreA == scoreB && scoreB == scoreC)
+        return vector<int>{1, 2, 3}; //R밸류 벡터 오름차순
+
+    // 점수가 A B가 같고 C보다 큰경우
+    if (scoreA == scoreB && scoreB > scoreC)
+        return vector<int>{1, 2};
+
+    // 점수가 A C가 같고 B보다 큰 경우 
+    if (scoreA == scoreC && scoreC > scoreB)
+        return vector<int>{1, 3};
+
+    // 점수가 B C가 같고 A보다 큰 경우 
+    if (scoreB == scoreC && scoreC > scoreA)
+        return vector<int>{2, 3};
+
+    //// 각각이 제일 큰 경우
+    //if (std::max(scoreA, scoreB, scoreC) == scoreA)
+    //    return vector<int>{1};
+    //// 각각이 제일 큰 경우
+    //if (max(scoreA, scoreB, scoreC) == scoreB)
+    //    return vector<int>{2};
+    //// 각각이 제일 큰 경우
+    //if (max(scoreA, scoreB, scoreC) == scoreC)
+    //    return vector<int>{3};
+
+    // 각각이 제일 큰 경우
+    if (std::max(scoreB, scoreC) < scoreA)
+        return vector<int>{1};
+    // 각각이 제일 큰 경우
+    if (max(scoreA, scoreC) < scoreB)
+        return vector<int>{2};
+    // 각각이 제일 큰 경우
+    if (max(scoreA, scoreB) < scoreC)
+        return vector<int>{3};
+}
 
 
-    //std::sort(scoreSumVec.begin(), scoreSumVec.end(), [](pair<int, int> left, pair<int, int> right)
-    //    {
-    //        return left.second < right.second; //오름차순
-    //    });
 
-    //최대힙에 넣어서.. 최대값 pop해서 넣고 만약 또 pop 했는데 같다면 넣고 안같다면 안넣고
 
-    //제일 많이 맞춘애 1명이면 1 벡터 반환 2명이면 2
-   
-
-    //오름차순 필요
-    std::sort(answer.begin(), answer.end());
-    return answer;
+int main(void)
+{
+    vector<int> answer1 = solution({ 1,2,3,4,5 });
+    vector<int> answer2 = solution({ 1,3,2,4,2 });
+    return 0;
 }
